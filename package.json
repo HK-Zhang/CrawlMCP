@@ -1,0 +1,37 @@
+{
+  "name": "crawl-mcp",
+  "version": "1.0.0",
+  "description": "MCP server to fetch raw HTML content from Chrome pages via Chrome DevTools Protocol",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "crawl-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "prebuild": "npm audit --omit=dev --audit-level=moderate",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "chrome",
+    "devtools",
+    "html",
+    "crawler"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "chrome-remote-interface": "^0.33.3"
+  },
+  "devDependencies": {
+    "@types/chrome-remote-interface": "^0.31.14",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

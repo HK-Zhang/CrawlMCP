@@ -1,0 +1,10 @@
+{
+    "chat.instructionsFilesLocations": {
+        ".github/instructions": true,
+        "C:\\Users\\YXZHK\\source\\explore\\awesome-copilot\\instructions\\markdown.instructions.md": true,
+        "C:\\Users\\YXZHK\\source\\explore\\awesome-copilot\\instructions\\security-and-owasp.instructions.md": true,
+        "C:\\Users\\YXZHK\\source\\explore\\awesome-copilot\\instructions\\self-explanatory-code-commenting.instructions.md": true,
+        "C:\\Users\\YXZHK\\source\\explore\\awesome-copilot\\instructions\\typescript-mcp-server.instructions.md": true,
+        "C:\\Users\\YXZHK\\source\\explore\\awesome-copilot\\instructions\\typescript-5-es2022.instructions.md": true,
+    },
+}

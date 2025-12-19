@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "crawl-debug": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "--inspect=9329",
+        "./dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  }
+}
