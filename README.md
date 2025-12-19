@@ -1,5 +1,10 @@
 # CrawlMCP
 
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)](https://nodejs.org/)
+[![MCP Server](https://img.shields.io/badge/MCP-Server-blue)](https://modelcontextprotocol.io/)
+[![npm](https://img.shields.io/npm/v/crawl-mcp)](https://www.npmjs.com/package/crawl-mcp)
+
 A Model Context Protocol (MCP) server that fetches raw HTML content from Chrome pages via the Chrome DevTools Protocol. Designed to complement [chrome-devtools-mcp](https://github.com/anthropics/chrome-devtools-mcp) by providing HTML extraction capabilities.
 
 ## Features
