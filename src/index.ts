@@ -8,6 +8,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import CDP from "chrome-remote-interface";
+import sanitizeHtml from "sanitize-html";
 
 interface CDPClient {
   Runtime: {
@@ -36,38 +37,53 @@ const CDP_HOST = process.env.CDP_HOST || "localhost";
 const CDP_PORT = Number.parseInt(process.env.CDP_PORT || "9222", 10);
 
 function removeUnwantedElements(html: string): string {
-  let result = html
-    .replaceAll(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-    .replaceAll(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-    .replaceAll(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-    .replaceAll(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
-    .replaceAll(/<img[^>]*src=["']data:image[^"']*;base64,[^"']*["'][^>]*>/gi, "")
-    .replaceAll(/<meta[^>]*>/gi, "")
-    .replaceAll(/data:image[^";)]*;base64,[A-Za-z0-9+/=]+/g, "")
-    .replaceAll(/<i[^>]*>[\s\S]*?<\/i>/gi, "")
-    .replaceAll(/<input[^>]*>/gi, "");
-
-  const allowedAttrs = new Set(["id", "href", "src"]);
-  result = result.replaceAll(/<([a-z][a-z0-9]*)\s+([^>]*)>/gi, (match, tag, attrs) => {
-    const attrRegex = /([a-z][a-z0-9-]*)\s*=\s*["']([^"']*)["']/gi;
-    let attrMatch;
-    const cleanedAttrs: string[] = [];
-    
-    while ((attrMatch = attrRegex.exec(attrs)) !== null) {
-      const attrName = attrMatch[1].toLowerCase();
-      if (allowedAttrs.has(attrName)) {
-        cleanedAttrs.push(attrMatch[0]);
-      }
+  // Use a well-tested HTML sanitizer instead of ad-hoc regex replacements.
+  // Configure allowed tags and attributes to approximate the previous behavior:
+  // - Disallow head/script/style/svg/iframe/meta/input/i and data-URI images.
+  // - Allow only selected attributes on specific tags.
+  return sanitizeHtml(html, {
+    allowedTags: [
+      "a",
+      "p",
+      "div",
+      "span",
+      "ul",
+      "ol",
+      "li",
+      "strong",
+      "em",
+      "b",
+      "u",
+      "small",
+      "sub",
+      "sup",
+      "br",
+      "hr",
+      "code",
+      "pre",
+      "blockquote",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+      "img",
+      "button"
+    ],
+    allowedAttributes: {
+      "*": ["id"],
+      a: ["href"],
+      img: ["src", "alt"]
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    allowedSchemesAppliedToAttributes: ["href", "src"],
+    allowProtocolRelative: false,
+    // Disallow data: URLs entirely to avoid data:image/... payloads.
+    allowedSchemesByTag: {
+      img: ["http", "https"]
     }
-    
-    return `<${tag}${cleanedAttrs.length > 0 ? " " + cleanedAttrs.join(" ") : ""}>`;
   });
-
-  result = result.replaceAll(/>\s+</g, "><");
-
-  result = result.replaceAll(/<([a-z][a-z0-9]*)>\s*<\/\1>/gi, "");
-
-  return result;
 }
 
 async function getTargets(): Promise<CDPTarget[]> {
