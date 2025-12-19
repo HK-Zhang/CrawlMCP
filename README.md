@@ -43,8 +43,12 @@ Add to your VS Code `settings.json`:
   "mcp": {
     "servers": {
       "crawl-mcp": {
-        "command": "node",
-        "args": ["c:/Users/YXZHK/source/explore/CrawlMCP/dist/index.js"]
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "crawl-mcp"
+        ]
       }
     }
   }
@@ -59,8 +63,12 @@ Add to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "crawl-mcp": {
-      "command": "node",
-      "args": ["c:/Users/YXZHK/source/explore/CrawlMCP/dist/index.js"]
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "crawl-mcp"
+      ]
     }
   }
 }
