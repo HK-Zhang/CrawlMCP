@@ -47,6 +47,7 @@ function removeUnwantedElements(html: string): string {
       .replaceAll(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
       .replaceAll(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
       .replaceAll(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
+      .replaceAll(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, "")
       .replaceAll(/<img[^>]*src=["']data:image[^"']*;base64,[^"']*["'][^>]*>/gi, "")
       .replaceAll(/<meta[^>]*>/gi, "")
       .replaceAll(/data:image[^";)]*;base64,[A-Za-z0-9+/=]+/g, "")
