@@ -68,7 +68,8 @@ function removeUnwantedElements(html: string): string {
       "tr",
       "th",
       "td",
-      "img"
+      "img",
+      "button"
     ],
     allowedAttributes: {
       "*": ["id"],

@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/chrome-remote-interface": "^0.31.14",
     "@types/node": "^22.10.2",
+    "@types/sanitize-html": "^2.16.0",
     "typescript": "^5.7.2"
   },
   "engines": {
