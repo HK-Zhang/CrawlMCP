@@ -36,36 +36,43 @@ const CDP_HOST = process.env.CDP_HOST || "localhost";
 const CDP_PORT = Number.parseInt(process.env.CDP_PORT || "9222", 10);
 
 function removeUnwantedElements(html: string): string {
-  let result = html
-    .replaceAll(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
-    .replaceAll(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
-    .replaceAll(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
-    .replaceAll(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
-    .replaceAll(/<img[^>]*src=["']data:image[^"']*;base64,[^"']*["'][^>]*>/gi, "")
-    .replaceAll(/<meta[^>]*>/gi, "")
-    .replaceAll(/data:image[^";)]*;base64,[A-Za-z0-9+/=]+/g, "")
-    .replaceAll(/<i[^>]*>[\s\S]*?<\/i>/gi, "")
-    .replaceAll(/<input[^>]*>/gi, "");
+  let result = html;
+  let previous: string;
 
-  const allowedAttrs = new Set(["id", "href", "src"]);
-  result = result.replaceAll(/<([a-z][a-z0-9]*)\s+([^>]*)>/gi, (match, tag, attrs) => {
-    const attrRegex = /([a-z][a-z0-9-]*)\s*=\s*["']([^"']*)["']/gi;
-    let attrMatch;
-    const cleanedAttrs: string[] = [];
-    
-    while ((attrMatch = attrRegex.exec(attrs)) !== null) {
-      const attrName = attrMatch[1].toLowerCase();
-      if (allowedAttrs.has(attrName)) {
-        cleanedAttrs.push(attrMatch[0]);
+  do {
+    previous = result;
+
+    result = result
+      .replaceAll(/<head[^>]*>[\s\S]*?<\/head>/gi, "")
+      .replaceAll(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+      .replaceAll(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+      .replaceAll(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "")
+      .replaceAll(/<img[^>]*src=["']data:image[^"']*;base64,[^"']*["'][^>]*>/gi, "")
+      .replaceAll(/<meta[^>]*>/gi, "")
+      .replaceAll(/data:image[^";)]*;base64,[A-Za-z0-9+/=]+/g, "")
+      .replaceAll(/<i[^>]*>[\s\S]*?<\/i>/gi, "")
+      .replaceAll(/<input[^>]*>/gi, "");
+
+    const allowedAttrs = new Set(["id", "href", "src"]);
+    result = result.replaceAll(/<([a-z][a-z0-9]*)\s+([^>]*)>/gi, (match, tag, attrs) => {
+      const attrRegex = /([a-z][a-z0-9-]*)\s*=\s*["']([^"']*)["']/gi;
+      let attrMatch;
+      const cleanedAttrs: string[] = [];
+      
+      while ((attrMatch = attrRegex.exec(attrs)) !== null) {
+        const attrName = attrMatch[1].toLowerCase();
+        if (allowedAttrs.has(attrName)) {
+          cleanedAttrs.push(attrMatch[0]);
+        }
       }
-    }
-    
-    return `<${tag}${cleanedAttrs.length > 0 ? " " + cleanedAttrs.join(" ") : ""}>`;
-  });
+      
+      return `<${tag}${cleanedAttrs.length > 0 ? " " + cleanedAttrs.join(" ") : ""}>`;
+    });
 
-  result = result.replaceAll(/>\s+</g, "><");
+    result = result.replaceAll(/>\s+</g, "><");
 
-  result = result.replaceAll(/<([a-z][a-z0-9]*)>\s*<\/\1>/gi, "");
+    result = result.replaceAll(/<([a-z][a-z0-9]*)>\s*<\/\1>/gi, "");
+  } while (result !== previous);
 
   return result;
 }
