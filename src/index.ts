@@ -162,7 +162,7 @@ async function listPages(): Promise<{ index: number; title: string; url: string 
 
 const server = new McpServer({
   name: "crawl-mcp",
-  version: "1.0.3",
+  version: "1.0.4",
 });
 
 server.registerTool(
